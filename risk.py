@@ -1,4 +1,6 @@
 import argparse
+import subprocess
+import sys
 from dataclasses import asdict
 
 from getpr import PullRequestReader
@@ -35,6 +37,11 @@ def main():
     parser.add_argument("--owner", required=True)
     parser.add_argument("--repo", required=True)
     parser.add_argument("--pull", type=int, required=True)
+    parser.add_argument(
+        "--test-location",
+        required=False,
+        help="Path to a pytest file or test directory",
+    )
 
     args = parser.parse_args()
 
@@ -50,6 +57,17 @@ def main():
     print("Changed files:", len(changed_files))
     print("Risk level:", risk)
 
+    if args.test_location:
+        test_result = subprocess.run(
+            [sys.executable, "-m", "pytest", args.test_location],
+            check=False,
+        )
+        print("Test exit code:", test_result.returncode)
+        return test_result.returncode
+
+    print("Tests skipped: no test location provided")
+    return 0
+
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
