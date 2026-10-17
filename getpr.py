@@ -77,15 +77,3 @@ class PullRequestReader:
 
         return changed_files
 
-
-if __name__ == "__main__":
-    reader = PullRequestReader(
-        owner="JAI4213H",
-        repo="Machine-Learning-and-compe",
-        pull_number=1,
-    )
-
-    for file in reader.get_changed_files():
-        print(file.filename)
-        print("Added:", file.added_lines)
-        print("Removed:", file.removed_lines)
