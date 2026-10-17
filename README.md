@@ -116,26 +116,40 @@ share the token in a chat, commit, screenshot, or issue.
 
 ## Usage
 
-### Review a pull request without running tests
+### Bash, Git Bash, macOS, or Linux
 
-```powershell
-python risk.py `
-  --owner JAI4213H `
-  --repo Machine-Learning-and-compe `
+Review a pull request without running tests:
+
+```bash
+python risk.py \
+  --owner JAI4213H \
+  --repo Machine-Learning-and-compe \
   --pull 1
 ```
 
-### Review a pull request and run one test file
+Review a pull request and run one test file:
 
-```powershell
-python risk.py `
-  --owner JAI4213H `
-  --repo Machine-Learning-and-compe `
-  --pull 1 `
+```bash
+python risk.py \
+  --owner JAI4213H \
+  --repo Machine-Learning-and-compe \
+  --pull 1 \
   --test-location tests/test_model.py
 ```
 
-### Review a pull request and run a test directory
+Review a pull request and run a test directory:
+
+```bash
+python risk.py \
+  --owner JAI4213H \
+  --repo Machine-Learning-and-compe \
+  --pull 1 \
+  --test-location tests
+```
+
+### PowerShell
+
+PowerShell uses a backtick for line continuation:
 
 ```powershell
 python risk.py `
@@ -144,6 +158,8 @@ python risk.py `
   --pull 1 `
   --test-location tests
 ```
+
+You can also write the PowerShell command on one line.
 
 `--test-location` is optional. If you do not provide it, Jev still assesses
 the pull request and JevGuard posts `Tests: skipped`.
