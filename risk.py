@@ -1,3 +1,5 @@
+import argparse
+
 from getpr import PullRequestReader
 
 
@@ -22,11 +24,20 @@ def assess_risk(changed_files):
     return "low"
 
 
-if __name__ == "__main__":
+def main():
+    parser = argparse.ArgumentParser(
+        description="Assess GitHub pull-request risk"
+    )
+    parser.add_argument("--owner", required=True)
+    parser.add_argument("--repo", required=True)
+    parser.add_argument("--pull", type=int, required=True)
+
+    args = parser.parse_args()
+
     reader = PullRequestReader(
-        owner="JAI4213H",
-        repo="Machine-Learning-and-compe",
-        pull_number=1,
+        owner=args.owner,
+        repo=args.repo,
+        pull_number=args.pull,
     )
 
     changed_files = reader.get_changed_files()
@@ -34,3 +45,7 @@ if __name__ == "__main__":
 
     print("Changed files:", len(changed_files))
     print("Risk level:", risk)
+
+
+if __name__ == "__main__":
+    main()
