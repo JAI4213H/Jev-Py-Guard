@@ -1,27 +1,31 @@
 import argparse
+from dataclasses import asdict
 
 from getpr import PullRequestReader
+from typesafe_sdk import Choice, TypeSafeClient
 
 
 def assess_risk(changed_files):
-    risky_words = (
-        "auth",
-        "security",
-        "payment",
-        "database",
-        "deploy",
-    )
+    state = {
+        "changed_files": [asdict(file) for file in changed_files]
+    }
 
-    for file in changed_files:
-        filename = file.filename.lower()
+    with TypeSafeClient() as client:
+        result = client.system_one(
+            state=state,
+            questions={
+                "risk": Choice(
+                    instructions="How risky are these code changes?",
+                    criteria={
+                        "low": "Documentation, comments, or formatting changes",
+                        "medium": "Normal application logic changes",
+                        "high": "Security, authentication, payments, databases, or deployment changes",
+                    },
+                )
+            },
+        )
 
-        if any(word in filename for word in risky_words):
-            return "high"
-
-    if len(changed_files) > 5:
-        return "medium"
-
-    return "low"
+    return result.choices["risk"].choice
 
 
 def main():
