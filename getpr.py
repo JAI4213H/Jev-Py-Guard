@@ -33,6 +33,7 @@ class PullRequestReader:
         response = requests.get(
             f"{self.url}/files",
             headers=self.headers,
+            timeout=30,
         )
         response.raise_for_status()
 
